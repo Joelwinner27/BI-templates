@@ -1,0 +1,64 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 550,
+  "height": 380,
+  "padding": 10,
+  "background": "#FFFFFF",
+
+  "signals": [
+    { "name": "hexR", "value": 22 }
+  ],
+
+  "data": [
+    {
+      "name": "dataset",
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "datum['COL'] * hexR * sqrt(3) + (datum['ROW'] % 2 == 1 ? hexR * sqrt(3) / 2 : 0)",
+          "as": "px"
+        },
+        {
+          "type": "formula",
+          "expr": "datum['ROW'] * hexR * 1.5",
+          "as": "py"
+        },
+        {
+          "type": "formula",
+          "expr": "'M ' + datum.px                        + ',' + (datum.py - hexR)            + ' L ' + (datum.px + hexR * 0.866) + ',' + (datum.py - hexR * 0.5) + ' L ' + (datum.px + hexR * 0.866) + ',' + (datum.py + hexR * 0.5) + ' L ' + datum.px                        + ',' + (datum.py + hexR)            + ' L ' + (datum.px - hexR * 0.866) + ',' + (datum.py + hexR * 0.5) + ' L ' + (datum.px - hexR * 0.866) + ',' + (datum.py - hexR * 0.5) + ' Z'",
+          "as": "hexPath"
+        }
+      ]
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "path",
+      "from": { "data": "dataset" },
+      "encode": {
+        "enter": {
+          "path":        { "field": "hexPath" },
+          "fill":        { "value": "#00274c" },
+          "stroke":      { "value": "#ffcb05" },
+          "strokeWidth": { "value": 1.5 }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": { "data": "dataset" },
+      "encode": {
+        "enter": {
+          "x":        { "field": "px" },
+          "y":        { "field": "py" },
+          "text":     { "field": "STATE" },
+          "align":    { "value": "center" },
+          "baseline": { "value": "middle" },
+          "fontSize": { "value": 7 },
+          "fill":     { "value": "#ffcb05" }
+        }
+      }
+    }
+  ]
+}
